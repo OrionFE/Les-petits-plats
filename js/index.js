@@ -1,13 +1,23 @@
 import {recipes} from "./recipes.js";
 
 console.log(recipes)
-function displayRecipe () {
+function displayRecipe (arrayRecipe) {
 
     const recipesContainer = document.querySelector('.recipes-container')
+    recipesContainer.innerHTML = ''
 
-    document.querySelector('.nb-recipe').innerText = recipes.length
+    let recipesToShow
 
-    recipes.map((recipe => {
+    if(arrayRecipe) {
+        recipesToShow = arrayRecipe
+        console.log(recipesToShow)
+    }else {
+        recipesToShow = recipes
+    }
+
+    document.querySelector('.nb-recipe').innerText = recipesToShow.length
+
+    recipesToShow.map((recipe => {
 
         const {name , image , description , time , ingredients } = recipe
 
@@ -81,6 +91,54 @@ function displayRecipe () {
 
 
     }))
+
 }
+function searchBarEvent (e) {
+    let keyword = ''
+    if(e.target.value.length > 2){
+        keyword = e.target.value
+        searchRecipe(keyword)
+    }else {
+        keyword= ''
+        searchRecipe(keyword)
+    }
+}
+
+const inputSearch = document.querySelector('.input-search')
+
+inputSearch.addEventListener("input" , searchBarEvent)
+
+function searchRecipe (keyword) {
+
+    let newArray = []
+
+    recipes.map((recipe) => {
+        const {name , ingredients , description} = recipe
+
+        let ingredientsList = []
+
+        ingredients.map((ing) => {
+        ingredientsList.push(ing.ingredient)
+        })
+
+        ingredientsList.toString().toLowerCase()
+        keyword = keyword.toLowerCase()
+
+        if(
+            name.toLowerCase().includes(keyword)
+            ||
+            ingredientsList.includes(keyword)
+            ||
+            description.toLowerCase().includes(keyword)
+        ){
+            newArray.push(recipe)
+        }
+    })
+
+    displayRecipe(newArray)
+
+}
+
+
 
 displayRecipe()
