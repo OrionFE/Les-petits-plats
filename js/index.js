@@ -127,7 +127,7 @@ function searchRecipe (keyword) {
         let ingredientsList = []
 
         ingredients.map((ing) => {
-        ingredientsList.push(ing.ingredient)
+            ingredientsList.push(ing.ingredient)
         })
 
         ingredientsList.toString().toLowerCase()
@@ -164,7 +164,7 @@ function getListIng () {
 
 
     })
-        return arrayIng
+    return arrayIng
 
 }
 function getListApp () {
@@ -175,7 +175,7 @@ function getListApp () {
         const app = recipe.appliance
 
         if(!arrayApp.includes(app)){
-                     arrayApp.push(app)
+            arrayApp.push(app)
         }
     })
     return arrayApp
@@ -369,6 +369,7 @@ function getArrayByTag(arrayTag){
     const ingTag = arrayTag.filter((tag) => {
         return tag.typeTag === 'ingredients-button'
     } )
+
     ingTag.map(ing => {
         ingTagList.push(ing.valueTag)
     })
@@ -393,7 +394,7 @@ function getArrayByTag(arrayTag){
     const filteredRecipes = recipes.filter(recipe => {
         return (
             ingTagList.every(ing =>
-                recipe.ingredients.some(obj => obj.ingredient === ing)
+                recipe.ingredients.some(obj => obj.ingredient.toLowerCase() === ing)
             )
             &&
             appTagList.every(app => recipe.appliance.includes(app))
