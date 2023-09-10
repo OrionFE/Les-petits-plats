@@ -83,17 +83,42 @@ main{
 .menu{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .filters{
     display: flex;
     gap: 66px;
+    align-items: flex-start;
 }
 
-.btn-filter{
+.div-filters{
     background: white;
     border-radius: 11px;
+    max-height: 315px;
+    max-width: 195px;
+}
+
+.div-filters ul {
+    display: flex;
+    flex-direction: column;
+    max-height: 180px;
+    overflow: scroll;
+    gap: 0;
+}
+
+.div-filters li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+}
+
+.div-filters li:hover {
+    background: #FFD15B;
+}
+
+
+.btn-filter{
     width: 195px;
     padding: 16px;
     display: flex;
@@ -104,6 +129,7 @@ main{
 .nb-recettes{
     font-size: 21px;
     font-family: Anton, sans-serif;
+    margin-top: 10px;
 }
 
 .recipes-container{
@@ -181,4 +207,49 @@ ul{
 
 .ingredient-amount{
     color: #7A7A7A;
+}
+
+.search-input {
+    display: flex;
+    position: relative;
+}
+
+.search-input input {
+    width: 165px;
+    height: 36px;
+    margin-left: 15px;
+}
+
+.search-input img {
+    position: absolute;
+    top: 11px;
+    right: 30px;
+}
+
+.chevron{
+    padding: 5px;
+}
+
+.chevron , .ul-tag li{
+    cursor: pointer;
+}
+
+.tag-container{
+    display: flex;
+    margin-top: 17px;
+    gap: 10px;
+}
+
+.li-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #FFD15B;
+    padding: 18px;
+    border-radius: 10px ;
+}
+
+.li-tag img {
+    cursor: pointer;
 }
