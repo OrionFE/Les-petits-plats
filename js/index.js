@@ -1,6 +1,34 @@
 import {recipes} from "./recipes.js";
 
-console.log(recipes)
+function checkSubstringInSentence(sentence, substring) {
+    const lowerSentence = sentence.toLowerCase();
+    const lowerSubstring = substring.toLowerCase();
+
+    for (let i = 0; i <= lowerSentence.length - lowerSubstring.length; i++) {
+        let found = true;
+
+        for (let j = 0; j < lowerSubstring.length; j++) {
+            if (lowerSentence[i + j] !== lowerSubstring[j]) {
+                found = false;
+                break;
+            }
+        }
+
+        if (found) {
+            return true;
+        }
+    }
+
+    return false
+}
+function customIncludeArray(arr, element) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === element) {
+            return true;
+        }
+    }
+    return false;
+}
 
 function displayRecipe (arrayRecipe) {
 
@@ -18,14 +46,14 @@ function displayRecipe (arrayRecipe) {
     document.querySelector('.nb-recipe').innerText = recipesToShow.length
 
     if(recipesToShow.length === 0){
-        console.log('test')
         const noRecipe = document.createElement('p')
         noRecipe.innerText = 'Aucune recette correspondante à la recherche'
         recipesContainer.appendChild(noRecipe)
     } else {
-        recipesToShow.map((recipe => {
 
-            const {name , image , description , time , ingredients } = recipe
+        for(let i = 0 ; recipesToShow.length > i ; i++){
+
+            const {name , image , description , time , ingredients } = recipesToShow[i]
 
             const card = document.createElement('div')
             card.classList.add('card')
@@ -63,9 +91,9 @@ function displayRecipe (arrayRecipe) {
             ingredientDiv.appendChild(ingredientTitle)
             const ingredientList = document.createElement('ul')
 
-            ingredients.map((ing) => {
+            for(let i = 0 ; ingredients.length > i ; i++){
 
-                const { ingredient , quantity , unit } = ing
+                const { ingredient , quantity , unit } = ingredients[i]
 
                 const list = document.createElement('li')
                 list.classList.add('list-ingredient')
@@ -88,7 +116,7 @@ function displayRecipe (arrayRecipe) {
                 list.appendChild(ingredientAmount)
 
                 ingredientList.appendChild(list)
-            })
+            }
 
             ingredientDiv.appendChild(ingredientList)
             cardContent.appendChild(ingredientDiv)
@@ -96,7 +124,8 @@ function displayRecipe (arrayRecipe) {
             recipesContainer.appendChild(card)
 
 
-        }))
+        }
+
     }
 
 
@@ -121,28 +150,29 @@ function searchRecipe (keyword) {
 
     let newArray = []
 
-    recipes.map((recipe) => {
-        const {name , ingredients , description} = recipe
+    for(let i = 0 ; recipes.length > i ; i++){
+        const {name , ingredients , description} = recipes[i]
 
         let ingredientsList = []
 
-        ingredients.map((ing) => {
-        ingredientsList.push(ing.ingredient)
-        })
+        for(let i = 0 ; ingredients.length > i ; i++){
+            ingredientsList.push(ingredients[i].ingredient)
+        }
 
         ingredientsList.toString().toLowerCase()
         keyword = keyword.toLowerCase()
 
         if(
-            name.toLowerCase().includes(keyword)
+            checkSubstringInSentence(name , keyword)
             ||
-            ingredientsList.includes(keyword)
+            customIncludeArray(ingredientsList, keyword)
             ||
-            description.toLowerCase().includes(keyword)
+            checkSubstringInSentence(description, keyword)
         ){
-            newArray.push(recipe)
+            newArray.push(recipes[i])
         }
-    })
+    }
+
 
     displayRecipe(newArray)
 
@@ -151,33 +181,32 @@ function getListIng () {
 
     let arrayIng = []
 
-    recipes.map((recipe) => {
-        const ing = recipe.ingredients
+    for(let i = 0 ; recipes.length > i ; i++){
+        const ing = recipes[i].ingredients
 
-        ing.map((i) => {
+        for(let j = 0 ; ing.length > j ; j++){
 
-            if(!arrayIng.includes(i.ingredient.toLowerCase())){
-                arrayIng.push(i.ingredient.toLowerCase())
+            if(!customIncludeArray(arrayIng, ing[j].ingredient.toLowerCase())){
+                arrayIng.push(ing[j].ingredient.toLowerCase())
             }
+        }
 
-        })
-
-
-    })
-        return arrayIng
-
+    }
+    return arrayIng
 }
 function getListApp () {
 
     let arrayApp = []
 
-    recipes.map((recipe) => {
-        const app = recipe.appliance
+    for(let i = 0 ; recipes.length > i ; i++){
+        const app = recipes[i].appliance
 
-        if(!arrayApp.includes(app)){
-                     arrayApp.push(app)
+        if(!customIncludeArray(arrayApp, app)){
+            arrayApp.push(app)
         }
-    })
+
+    }
+
     return arrayApp
 
 }
@@ -185,24 +214,23 @@ function getListUst () {
 
     let arrayUst = []
 
-    recipes.map((recipe) => {
-        const ust = recipe.ustensils
+    for(let i = 0 ; recipes.length > i ; i++){
+        const ust = recipes[i].ustensils
 
+        for(let j = 0 ; ust.length > j ; j++){
 
-        ust.map((u) => {
-
-            if(!arrayUst.includes(u.toLowerCase())){
-                arrayUst.push(u.toLowerCase())
+            if(!customIncludeArray(arrayUst , ust[j].toLowerCase())){
+                arrayUst.push(ust[j].toLowerCase())
             }
 
-        })
+        }
 
+    }
 
-    })
     return arrayUst
 
 }
-function displayTag(list, type, search){
+function displayTag(list, type){
 
     let input = null
 
@@ -214,9 +242,9 @@ function displayTag(list, type, search){
         input = document.querySelector('.ul-tag-ustensiles-button')
     }
 
-    if(search){
-        input.innerHTML = ''
-    }
+
+    input.innerHTML = ''
+
 
     if(list.length === 0){
         const li = document.createElement('li')
@@ -225,13 +253,13 @@ function displayTag(list, type, search){
     }
 
 
-    list.map((x) => {
+    for(let i = 0 ; list.length > i ; i++){
         const li = document.createElement('li')
         li.classList.add(type)
-        li.innerText = x
+        li.innerText = list[i]
         input.appendChild(li)
         li.addEventListener('click' , addTag)
-    })
+    }
 
 }
 function dropdown (input, list)  {
@@ -319,12 +347,21 @@ function searchTag (keyword, type) {
         currentArrayTag = getListUst()
     }
 
-    currentArrayTag.map((tag) => {
-        if(tag.toLowerCase().includes(keyword.toLowerCase())){
-            newArrayTag.push(tag)
+    if(keyword !== ''){
+
+        for(let i = 0 ; currentArrayTag.length > i ; i++){
+
+            if(checkSubstringInSentence(currentArrayTag[i] , keyword)){
+                newArrayTag.push(currentArrayTag[i])
+            }
+
         }
-    })
-    displayTag(newArrayTag, type)
+
+        displayTag(newArrayTag, type)
+    }else {
+        displayTag(currentArrayTag, type)
+    }
+
 
 }
 
@@ -350,14 +387,13 @@ function sortByTag (){
 
     let arrayTag = []
 
-    tagSelected.map((node) => {
-        const typeTag = node.firstChild.childNodes[0].parentElement.classList[0]
-        const valueTag = node.firstChild.childNodes[0].nodeValue
+    for(let i = 0 ; tagSelected.length > i ; i++){
+        const typeTag = tagSelected[i].firstChild.childNodes[0].parentElement.classList[0]
+        const valueTag = tagSelected[i].firstChild.childNodes[0].nodeValue
         arrayTag.push({typeTag , valueTag})
-    })
+    }
 
     getArrayByTag(arrayTag)
-
 }
 
 function getArrayByTag(arrayTag){
@@ -366,41 +402,89 @@ function getArrayByTag(arrayTag){
     let appTagList = []
     let ustTagList = []
 
-    const ingTag = arrayTag.filter((tag) => {
-        return tag.typeTag === 'ingredients-button'
-    } )
-    ingTag.map(ing => {
-        ingTagList.push(ing.valueTag)
-    })
+    const ingTag = [];
 
-    const appTag = arrayTag.filter((tag) => {
-        return tag.typeTag === 'appareils-button'
-    } )
+    for (let i = 0; i < arrayTag.length; i++) {
+        if (arrayTag[i].typeTag === 'ingredients-button') {
+            ingTag.push(arrayTag[i]);
+        }
+    }
 
-    appTag.map(app => {
-        appTagList.push(app.valueTag)
-    })
+    for(let i = 0 ; ingTag.length > i ; i++){
+        ingTagList.push(ingTag[i].valueTag)
+    }
 
-    const ustTag = arrayTag.filter((tag) => {
-        return tag.typeTag === 'ustensiles-button'
-    } )
+    const appTag = [];
 
-    ustTag.map(ust => {
-        ustTagList.push(ust.valueTag)
-    })
+    for (let i = 0; i < arrayTag.length; i++) {
+        if (arrayTag[i].typeTag === 'appareils-button') {
+            appTag.push(arrayTag[i]);
+        }
+    }
+
+    for(let i = 0 ; appTag.length > i ; i++){
+        appTagList.push(appTag[i].valueTag)
+    }
 
 
-    const filteredRecipes = recipes.filter(recipe => {
-        return (
-            ingTagList.every(ing =>
-                recipe.ingredients.some(obj => obj.ingredient === ing)
-            )
-            &&
-            appTagList.every(app => recipe.appliance.includes(app))
-            &&
-            ustTagList.every(ust => recipe.ustensils.includes(ust))
-        );
-    });
+    const ustTag = [];
+
+    for (let i = 0; i < arrayTag.length; i++) {
+        if (arrayTag[i].typeTag === 'ustensiles-button') {
+            ustTag.push(arrayTag[i]);
+        }
+    }
+
+    for(let i = 0 ; ustTag.length > i ; i++){
+        ustTagList.push(ustTag[i].valueTag)
+    }
+
+    const filteredRecipes = [];
+
+    for (let i = 0; i < recipes.length; i++) {
+        const recipe = recipes[i];
+
+        let ingredientsMatch = true;
+        for (let j = 0; j < ingTagList.length; j++) {
+            const ing = ingTagList[j].toLowerCase();
+            let ingredientFound = false;
+            for (let k = 0; k < recipe.ingredients.length; k++) {
+                if (recipe.ingredients[k].ingredient.toLowerCase() === ing) {
+                    ingredientFound = true;
+                    break;
+                }
+            }
+            if (!ingredientFound) {
+                ingredientsMatch = false;
+                break;
+            }
+        }
+
+        let appliancesMatch = true;
+        for (let k = 0; k < appTagList.length; k++) {
+            const app = appTagList[k];
+
+            if(!checkSubstringInSentence(recipe.appliance , app)){
+                appliancesMatch = false;
+                break;
+            }
+        }
+
+        let ustensilsMatch = true;
+        for (let l = 0; l < ustTagList.length; l++) {
+            const ust = ustTagList[l];
+
+            if(!customIncludeArray(recipe.ustensils , ust)){
+                ustensilsMatch = false;
+                break;
+            }
+
+        }
+
+        if (ingredientsMatch && appliancesMatch && ustensilsMatch) {
+            filteredRecipes.push(recipe);
+        }
+    }
 
     displayRecipe(filteredRecipes)
 
@@ -409,13 +493,14 @@ function getArrayByTag(arrayTag){
 function removeTag(){
     const [...tagContainer] = document.querySelectorAll('.li-tag')
 
-    tagContainer.map((tag) => {
-        const removeBtn = tag.lastChild
+    for(let i = 0 ; tagContainer.length > i ; i++){
+        const removeBtn = tagContainer[i].lastChild
         removeBtn.addEventListener('click' , (e) => {
-            tag.remove()
+            tagContainer[i].remove()
             sortByTag()
         })
-    })
+    }
+
 
 }
 
