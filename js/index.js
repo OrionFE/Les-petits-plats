@@ -202,7 +202,7 @@ function getListUst () {
     return arrayUst
 
 }
-function displayTag(list, type, search){
+function displayTag(list, type){
 
     let input = null
 
@@ -214,9 +214,9 @@ function displayTag(list, type, search){
         input = document.querySelector('.ul-tag-ustensiles-button')
     }
 
-    if(search){
-        input.innerHTML = ''
-    }
+
+    input.innerHTML = ''
+
 
     if(list.length === 0){
         const li = document.createElement('li')
