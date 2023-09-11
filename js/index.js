@@ -30,6 +30,8 @@ function customIncludeArray(arr, element) {
     return false;
 }
 
+let globalListRecipe = []
+
 function displayRecipe (arrayRecipe) {
 
     const recipesContainer = document.querySelector('.recipes-container')
@@ -175,6 +177,7 @@ function searchRecipe (keyword) {
 
 
     displayRecipe(newArray)
+    globalListRecipe = newArray
 
 }
 function getListIng () {
@@ -441,8 +444,16 @@ function getArrayByTag(arrayTag){
 
     const filteredRecipes = [];
 
-    for (let i = 0; i < recipes.length; i++) {
-        const recipe = recipes[i];
+    let recipesList = []
+
+    if(globalListRecipe.length === 50 || globalListRecipe.length === 0){
+        recipesList = recipes
+    }else {
+        recipesList = globalListRecipe
+    }
+
+    for (let i = 0; i < recipesList.length; i++) {
+        const recipe = recipesList[i];
 
         let ingredientsMatch = true;
         for (let j = 0; j < ingTagList.length; j++) {
