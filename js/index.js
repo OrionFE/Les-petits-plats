@@ -218,25 +218,43 @@ function displayTag(list, type){
     input.innerHTML = ''
 
 
-    if(list.length === 0){
+    const tagSelected = [...document.querySelectorAll('.li-tag')]
+
+    let arrayTag = []
+
+    tagSelected.map((node) => {
+        const valueTag = node.firstChild.childNodes[0].nodeValue
+        arrayTag.push(valueTag)
+    })
+
+    const tagWithNoDuplicate = list.filter((tag) => {
+        return arrayTag.indexOf(tag) === -1
+    })
+
+
+
+    if(tagWithNoDuplicate.length === 0){
         const li = document.createElement('li')
         li.innerText = 'Aucun tag correspondant'
         input.appendChild(li)
     }
 
 
-    list.map((x) => {
+    tagWithNoDuplicate.map((x) => {
         const li = document.createElement('li')
         li.classList.add(type)
         li.innerText = x
         input.appendChild(li)
-        li.addEventListener('click' , addTag)
+        li.addEventListener('click' , (e) => {
+            addTag(e)
+            dropdown()
+        })
     })
 
 }
 function dropdown (input, list)  {
 
-    if(input.children.length === 3){
+    if(input === undefined || input.children.length === 3){
         const ul = document.querySelector('.ul-tag')
         const input = document.querySelector('.search-input')
         ul.remove()
@@ -271,7 +289,6 @@ function displayIngTag () {
 
     const input = document.querySelector('.ingredients-button')
     const button = document.querySelector('.chevron-up-ing')
-
 
     button.addEventListener('click' , () => {
         dropdown(input , getListIng())
