@@ -2,6 +2,8 @@ import {recipes} from "./recipes.js";
 
 console.log(recipes)
 
+let globalListRecipe = []
+
 function displayRecipe (arrayRecipe) {
 
     const recipesContainer = document.querySelector('.recipes-container')
@@ -18,7 +20,6 @@ function displayRecipe (arrayRecipe) {
     document.querySelector('.nb-recipe').innerText = recipesToShow.length
 
     if(recipesToShow.length === 0){
-        console.log('test')
         const noRecipe = document.createElement('p')
         noRecipe.innerText = 'Aucune recette correspondante à la recherche'
         recipesContainer.appendChild(noRecipe)
@@ -99,8 +100,6 @@ function displayRecipe (arrayRecipe) {
         }))
     }
 
-
-
 }
 function searchBarEvent (e) {
     let keyword = ''
@@ -145,6 +144,7 @@ function searchRecipe (keyword) {
     })
 
     displayRecipe(newArray)
+    globalListRecipe = newArray
 
 }
 function getListIng () {
@@ -407,8 +407,15 @@ function getArrayByTag(arrayTag){
         ustTagList.push(ust.valueTag)
     })
 
+    let recipesList = []
 
-    const filteredRecipes = recipes.filter(recipe => {
+    if(globalListRecipe.length === 50 || globalListRecipe.length === 0){
+        recipesList = recipes
+    }else {
+        recipesList = globalListRecipe
+    }
+
+    const filteredRecipes = recipesList.filter(recipe => {
         return (
             ingTagList.every(ing =>
                 recipe.ingredients.some(obj => obj.ingredient.toLowerCase() === ing)
