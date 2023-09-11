@@ -142,6 +142,7 @@ main{
 
 .card{
     width: 100%;
+    max-width: 400px;
     height: 730px;
     background: white;
     border-radius: 21px;
