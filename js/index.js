@@ -3,6 +3,8 @@ import {recipes} from "./recipes.js";
 console.log(recipes)
 
 let globalListRecipe = []
+let searchBarEnable = false
+let tagFilterEnable = false
 
 function displayRecipe (arrayRecipe) {
 
@@ -101,8 +103,21 @@ function displayRecipe (arrayRecipe) {
     }
 
 }
-function searchBarEvent (e) {
+function searchBarEvent (e, inputValue) {
     let keyword = ''
+
+    if(inputValue === undefined) {
+
+    }else if(inputValue > 2) {
+        keyword = inputValue
+        searchRecipe(keyword)
+        return
+    }else {
+        keyword= ''
+        searchRecipe(keyword)
+        return;
+    }
+
     if(e.target.value.length > 2){
         keyword = e.target.value
         searchRecipe(keyword)
@@ -119,8 +134,17 @@ inputSearch.addEventListener("input" , searchBarEvent)
 function searchRecipe (keyword) {
 
     let newArray = []
+    let recipeList = []
 
-    recipes.map((recipe) => {
+
+    if(!tagFilterEnable){
+        recipeList = recipes
+    }else {
+        recipeList = globalListRecipe
+    }
+
+
+    recipeList.map((recipe) => {
         const {name , ingredients , description} = recipe
 
         let ingredientsList = []
@@ -317,9 +341,11 @@ function searchBarEventTag (e) {
     let keyword = ''
     if(e.target.value.length > 2){
         keyword = e.target.value
+        searchBarEnable = true
         searchTag(keyword ,type)
     }else {
         keyword= ''
+        searchBarEnable = false
         searchTag(keyword, type)
     }
 }
@@ -409,7 +435,7 @@ function getArrayByTag(arrayTag){
 
     let recipesList = []
 
-    if(globalListRecipe.length === 50 || globalListRecipe.length === 0){
+    if(!searchBarEnable){
         recipesList = recipes
     }else {
         recipesList = globalListRecipe
@@ -427,12 +453,22 @@ function getArrayByTag(arrayTag){
         );
     });
 
+    if(!tagFilterEnable){
+
+    const inputValue = inputSearch.firstElementChild.value
+
+    searchBarEvent(1 ,inputValue)
+    }
+
     displayRecipe(filteredRecipes)
+    globalListRecipe = filteredRecipes
 
 }
 
 function removeTag(){
     const [...tagContainer] = document.querySelectorAll('.li-tag')
+
+    tagFilterEnable = tagContainer.length;
 
     tagContainer.map((tag) => {
         const removeBtn = tag.lastChild
